@@ -19,7 +19,7 @@ module.exports = () => {
     `Arquivo de configuração inexistente. Crie o arquivo ".config.json"
      na raíz do projeto baseado no arquivo ".config.example.json"!`
   )
-}
+
 
   throw new Error(
     'Arquivo de configuração inexistente. Crie o arquivo ".config.json" na raíz do projeto baseado no arquivo ".config.example.json"!',

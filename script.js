@@ -21,6 +21,14 @@ async function getUserList() {
         <td>${user.birth_date}</td>
         <td>${user.email}</td>
         <td>${user.cpf}</td>
+        <td class="register-actions">
+          <button 
+          class="delete-buton"
+          type="button"
+          onclick="deleteUser(${user.id})">
+          Excluir
+          </button>
+        </td>
       `
 
       userListContainer.appendChild(newUserTr)
@@ -54,3 +62,21 @@ createUserButton.addEventListener('click', async (event) => {
 
     await getUserList()
 })
+
+async function deleteUser(userId){
+  const deleteResult = await fetch(`http://localhost:3333/api/user/${userId}`,{
+    method: 'DELETE',
+  })
+
+  const deleteResultJson = await deleteResult.json()
+
+  if(deleteResultJson.deleteUserCount < 1){
+    console.error("Nenhum usuário foi deletado")
+    return
+  }
+
+  const userToBeDeleted = document.getElementById(`user-id-${userId}`)
+  userToBeDeleted.remove()
+
+  return deleteResultJson
+}

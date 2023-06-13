@@ -20,6 +20,14 @@ async function getserviceList() {
         <td>${service.service_name}</td>
         <td>${service.price}</td>
         <td>${service.duration}</td>
+        <td class="register-actions">
+          <button 
+          class="delete-buton"
+          type="button"
+          onclick="deleteService(${service.id})">
+          Excluir
+          </button>
+        </td>
       `
 
       serviceListContainer.appendChild(newserviceTr)
@@ -50,3 +58,22 @@ createServiceButton.addEventListener('click', async (event) => {
 
   await getserviceList()
 })
+
+
+async function deleteService(serviceId){
+  const deleteResult = await fetch(`http://localhost:3333/api/service/${serviceId}`,{
+    method: 'DELETE',
+  })
+
+  const deleteResultJson = await deleteResult.json()
+
+  if(deleteResultJson.deleteServiceCount < 1){
+    console.error("Nenhum serciço foi deletado")
+    return
+  }
+
+  const serviceToBeDeleted = document.getElementById(`servico-id-${serviceId}`)
+  serviceToBeDeleted.remove()
+
+  return deleteResultJson
+}

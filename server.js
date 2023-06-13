@@ -42,6 +42,20 @@ app.post('/api/user', async (request, response) => {
     response.json(user)
 })
 
+app.delete("/api/user/:id", function (request, response) {
+    if(!request.params.id){
+        request.status(400).send({ message: "É necessário um id para deletar um usuário!"})
+        return
+    }
+
+    User.destroy({where: {id: request.params.id}}).then((data)=>{
+        response.send({ deleteUsersCount:data})
+    })
+    .catch((err)=>{
+        response.status(500).send({ message: err.message || "Ocorreu um erro ao tentar deletar esse usuário" })
+    })
+})
+
 /* register animals */
 app.get('/api/animals', async (request, response) => {
     const animals = await Animal.findAll()
@@ -64,6 +78,20 @@ app.post('/api/animals',async (request, response) => {
     response.json(animal)
 })
 
+app.delete("/api/animals/:id", function (request, response) {
+    if(!request.params.id){
+        request.status(400).send({ message: "É necessário um id para deletar um animal!"})
+        return
+    }
+
+    Animal.destroy({where: {id: request.params.id}}).then((data)=>{
+        response.send({ deleteAnimalsCount:data})
+    })
+    .catch((err)=>{
+        response.status(500).send({ message: err.message || "Ocorreu um erro ao tentar deletar esse animal" })
+    })
+})
+
 /* register Service */
 app.get('/api/service',async (request, response) => {
     const service = await Service.findAll()
@@ -79,6 +107,20 @@ app.post('/api/service',async (request, response) => {
     }
     const service =  await Service.create(newService)
     response.json(newService)
+})
+
+app.delete("/api/service/:id", function (request, response) {
+    if(!request.params.id){
+        request.status(400).send({ message: "É necessário um id para deletar esse serviço!"})
+        return
+    }
+
+    Service.destroy({where: {id: request.params.id}}).then((data)=>{
+        response.send({ deleteServiceCount:data})
+    })
+    .catch((err)=>{
+        response.status(500).send({ message: err.message || "Ocorreu um erro ao tentar deletar esse serviço" })
+    })
 })
 
 /* register Call */

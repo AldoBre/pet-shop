@@ -23,6 +23,14 @@ async function getAnimalsList() {
         <td>${animals.weight}</td>
         <td>${animals.owner_name}</td>
         <td>${animals.is_vacinated}</td>
+        <td class="register-actions">
+          <button 
+          class="delete-buton"
+          type="button"
+          onclick="deleteAnimal(${animals.id})">
+          Excluir
+          </button>
+        </td>
       `
 
       animalsListContainer.appendChild(newAnimalsTr)
@@ -60,3 +68,21 @@ createAnimalButton.addEventListener('click', async (event) => {
 
   await getAnimalsList()
 })
+
+async function deleteAnimal(animalId){
+  const deleteResult = await fetch(`http://localhost:3333/api/animals/${animalId}`,{
+    method: 'DELETE',
+  })
+
+  const deleteResultJson = await deleteResult.json()
+
+  if(deleteResultJson.deleteAnimalCount < 1){
+    console.error("Nenhum animal foi deletado")
+    return
+  }
+
+  const animalToBeDeleted = document.getElementById(`animal-id-${animalId}`)
+  animalToBeDeleted.remove()
+
+  return deleteResultJson
+}
